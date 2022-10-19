@@ -304,7 +304,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               elevation: 0,
 
                               items:
-                            [
+                            const [
                               BottomNavigationBarItem(icon: Icon
                               (Icons.add),label: ''),BottomNavigationBarItem(icon: Icon
                               (Icons.add),label: ''),BottomNavigationBarItem(icon: Icon
