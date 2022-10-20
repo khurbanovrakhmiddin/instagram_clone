@@ -122,25 +122,25 @@ class _SearchPageState extends State<SearchPage> {
             borderRadius: BorderRadius.circular(25),
             child: user.imageUrl != null
                 ? CachedNetworkImage(
-              height: 40,
-              width: 40,
-              fit: BoxFit.cover,
-              imageUrl: user.imageUrl!,
-              placeholder: (context, url) => const Image(
-                  image: AssetImage("assets/images/user.png")),
-              errorWidget: (context, url, error) => Icon(Icons.error),
-            )
+                    height: 40,
+                    width: 40,
+                    fit: BoxFit.cover,
+                    imageUrl: user.imageUrl!,
+                    placeholder: (context, url) => const Image(
+                        image: AssetImage("assets/images/user.png")),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  )
                 : const Image(
-              image: AssetImage("assets/images/user.png"),
-              height: 40,
-              width: 40,
-            ),
+                    image: AssetImage("assets/images/user.png"),
+                    height: 40,
+                    width: 40,
+                  ),
           ),
         ),
         title: Text(
           user.fullName,
           style:
-          const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         subtitle: Text(user.email,
             style: const TextStyle(

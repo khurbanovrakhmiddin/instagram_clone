@@ -102,20 +102,20 @@ class FeedView extends StatelessWidget {
               borderRadius: BorderRadius.circular(25),
               child: feed.imageUser != null
                   ? CachedNetworkImage(
-                height: 40,
-                imageUrl: feed.imageUser!,
-                placeholder: (context, url) =>
-                const Image(
-                    image: AssetImage(
-                        "assets/images/user.png")),
-                errorWidget: (context, url, error) =>
-                const Icon(Icons.error),
-              )
+                      height: 40,
+                      imageUrl: feed.imageUser!,
+                      placeholder: (context, url) =>
+                          const Image(
+                              image: AssetImage(
+                                  "assets/images/user.png")),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                    )
                   : const Image(
-                image:
-                AssetImage("assets/images/user.png"),
-                height: 40,
-              ),
+                      image:
+                          AssetImage("assets/images/user.png"),
+                      height: 40,
+                    ),
             ),
             title: Text(
               feed.fullName,
@@ -128,13 +128,13 @@ class FeedView extends StatelessWidget {
                 style: const TextStyle(color: Colors.black)),
             trailing: feed.isMine
                 ? IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.more_horiz,
-                color: Colors.black,
-                size: 30,
-              ),
-            )
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.more_horiz,
+                      color: Colors.black,
+                      size: 30,
+                    ),
+                  )
                 : const SizedBox.shrink(),
           ),
           Stack(
@@ -149,7 +149,7 @@ class FeedView extends StatelessWidget {
                   color: Colors.grey,
                 ),
                 errorWidget: (context, url, error) =>
-                const Icon(Icons.error),
+                    const Icon(Icons.error),
               ),
             ],
           ),
@@ -164,7 +164,7 @@ class FeedView extends StatelessWidget {
                       ? Icons.favorite
                       : Icons.favorite_outline,
                   color:
-                  feed.isLiked ? Colors.red : Colors.black,
+                      feed.isLiked ? Colors.red : Colors.black,
                   size: 27.5,
                 ),
               ),

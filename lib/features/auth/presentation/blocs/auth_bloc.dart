@@ -59,47 +59,47 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void signUp(SignUpUserEvent event, Emitter<AuthState> emit) async {
     bool next = true;
 
-    // if(event.confirmPassword == event.password) {
-    //   Checking.emailChecking(event.email).fold((failure) {
-    //     next = false;
-    //     emit(AuthError());
-    //   }, (result) => next = true);
-    // } else {
-    //   return;
-    // }
-    //
-    // if(next) {
-    //   Checking.passwordChecking(event.password).fold((failure) {
-    //     next = false;
-    //     emit(AuthError());
-    //   }, (result) => next = true);
-    // } else {
-    //   return;
-    // }
-    //
-    // if(next) {
-    //   Checking.passwordChecking(event.confirmPassword).fold((failure) {
-    //     next = false;
-    //     emit(AuthError());
-    //   }, (result) => next = true);
-    // } else {
-    //   return;
-    // }
-    //
-    // if(next) {
-    //   Checking.nameChecking(event.fullName).fold((failure) {
-    //     next = false;
-    //     emit(AuthError());
-    //   }, (result) => next = true);
-    // } else {
-    //   return;
-    // }
-    //
-    // if(next) {
-    //   emit(AuthLoading());
-    // } else {
-    //   return;
-    // }
+    if(event.confirmPassword == event.password) {
+      Checking.emailChecking(event.email).fold((failure) {
+        next = false;
+        emit(AuthError());
+      }, (result) => next = true);
+    } else {
+      return;
+    }
+
+    if(next) {
+      Checking.passwordChecking(event.password).fold((failure) {
+        next = false;
+        emit(AuthError());
+      }, (result) => next = true);
+    } else {
+      return;
+    }
+
+    if(next) {
+      Checking.passwordChecking(event.confirmPassword).fold((failure) {
+        next = false;
+        emit(AuthError());
+      }, (result) => next = true);
+    } else {
+      return;
+    }
+
+    if(next) {
+      Checking.nameChecking(event.fullName).fold((failure) {
+        next = false;
+        emit(AuthError());
+      }, (result) => next = true);
+    } else {
+      return;
+    }
+
+    if(next) {
+      emit(AuthLoading());
+    } else {
+      return;
+    }
 
     final failureOrSignUp = await signUpUserUseCase(SignUpParams(fullName: event.fullName, email: event.email, password: event.password, confirmPassword: event.confirmPassword,),);
     failureOrSignUp.fold(
@@ -131,7 +131,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // } else {
     //   return;
     // }
-
     final failureOrSignIn = await signInUserUseCase(const SignInParams
       (email: 'rahmiddin@mobile.bro', password:'rahmiddin123',),);
     failureOrSignIn.fold(
