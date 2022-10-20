@@ -88,7 +88,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           const SizedBox(
                             height: 10,
                           ),
-
                           // #signin
                           AuthButton(title: "Sign Up", onPressed: () {
                             bloc.add(SignUpUserEvent(fullName: fullNameController.text, email: emailController.text, password: passwordController.text, confirmPassword: confirmPasswordController.text));

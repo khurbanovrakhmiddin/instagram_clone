@@ -342,30 +342,18 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Column itemOfPost(int index, BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        InkWell(
-          onLongPress: () {},
-          child: CachedNetworkImage(
-            width: MediaQuery.of(context).size.width,
-            fit: BoxFit.cover,
-            imageUrl: items[index].postImage,
-            placeholder: (context, url) => Container(
-              color: Colors.grey,
-            ),
-            errorWidget: (context, url, error) => Icon(Icons.error),
-          ),
+  InkWell itemOfPost(int index, BuildContext context) {
+    return InkWell(
+      onLongPress: () {},
+      child: CachedNetworkImage(
+        width: MediaQuery.of(context).size.width,
+        fit: BoxFit.cover,
+        imageUrl: items[index].postImage,
+        placeholder: (context, url) => Container(
+          color: Colors.grey,
         ),
-        Text(
-          items[index].caption,
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(
-          height: 15,
-        ),
-      ],
+        errorWidget: (context, url, error) => Icon(Icons.error),
+      ),
     );
   }
 }
