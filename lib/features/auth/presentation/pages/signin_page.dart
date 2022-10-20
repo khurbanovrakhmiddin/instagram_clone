@@ -2,6 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/core/service/service_locator.dart';
+import 'package:instagram_clone/core/util/auth_button.dart';
+import 'package:instagram_clone/core/util/text_filed_view.dart';
 import 'package:instagram_clone/core/util/utility.dart';
 import 'package:instagram_clone/features/auth/presentation/blocs/auth_bloc.dart';
 import 'package:instagram_clone/features/post/presentation/pages/home_page.dart';
@@ -55,13 +57,13 @@ class _SignInPageState extends State<SignInPage> {
                           ),
 
                           // #email
-                          textField(hintText: "Email", controller: emailController),
+                          AuthTextField(hintText: "Email", controller: emailController),
                           const SizedBox(
                             height: 10,
                           ),
 
                           // #password
-                          textField(
+                          AuthTextField(
                               hintText: "Password", controller: passwordController),
                           const SizedBox(
                             height: 20,
@@ -89,7 +91,7 @@ class _SignInPageState extends State<SignInPage> {
                             height: 20,
                           ),
                           // #signin
-                          button(title: "Sign In", onPressed: () {
+                          AuthButton(title: "Sign In", onPressed: () {
                             bloc.add(SignInUserEvent(email: emailController.text, password: passwordController.text));
                           }),
                         ],
@@ -139,47 +141,7 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  ClipRRect textField(
-      {required String hintText,
-      bool? isHidden,
-      required TextEditingController controller}) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(7.5),
-      child: TextField(
-        style: const TextStyle(fontSize: 16, color: Colors.black),
-        controller: controller,
-        obscureText: isHidden ?? false,
-        decoration: InputDecoration(
-          focusedBorder:const OutlineInputBorder(),
-            border: const OutlineInputBorder(),
-            filled: true,
-            fillColor: Colors.white54.withOpacity(0.2),
-            hintText: hintText,
-            hintStyle: const TextStyle(color: Colors.grey)),
-      ),
-    );
-  }
 
-  ElevatedButton button(
-      {required String title, required void Function() onPressed}) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.blueAccent,
-        minimumSize:const Size(double.infinity, 50),
 
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(7.5),
-          side: BorderSide(color: Colors.white54.withOpacity(0.2), width: 2),
-        ),
-      ),
-      onPressed: onPressed,
-   child: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 16,
-          color: Colors.white,
-        ),
-      ),
-    );
-  }
-}
+ }
+
