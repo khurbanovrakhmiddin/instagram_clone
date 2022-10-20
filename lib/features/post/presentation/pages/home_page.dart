@@ -56,8 +56,8 @@ class _HomePageState extends State<HomePage> {
         ),
       ],
       child: Scaffold(
-        body: PageView(
-          controller: pageController,
+        body: IndexedStack(
+          index: currentPage,
           children: [
             FeedPage(pageController: pageController),
             const SearchPage(),
@@ -65,11 +65,7 @@ class _HomePageState extends State<HomePage> {
             const LikesPage(),
             const ProfilePage(),
           ],
-          onPageChanged: (index) {
-            setState(() {
-              currentPage = index;
-            });
-          },
+
         ),
         bottomNavigationBar: CupertinoTabBar(
           currentIndex: currentPage,
@@ -83,7 +79,10 @@ class _HomePageState extends State<HomePage> {
             BottomNavigationBarItem(icon: Icon(Icons.account_circle)),
           ],
           onTap: (index) {
-            pageController.jumpToPage(index);
+            currentPage = index;
+            setState(() {
+
+            });
           },
         ),
       ),

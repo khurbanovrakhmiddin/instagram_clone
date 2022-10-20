@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/features/auth/domain/entities/user_entity.dart';
 import 'package:instagram_clone/features/auth/presentation/blocs/auth_bloc.dart';
-import 'package:instagram_clone/features/auth/presentation/pages/signin_page.dart';
 import 'package:instagram_clone/features/post/domain/entities/post_entity.dart';
 import 'package:instagram_clone/features/post/presentation/blocs/post_bloc.dart';
 
@@ -18,22 +18,29 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  bool isLoading = false;
   List<Post> items = [];
+  File? _image;
   User? user;
+  int countPosts = 0;
 
   // for user image
   _imgFromCamera() async {
     XFile? image = await ImagePicker()
         .pickImage(source: ImageSource.camera, imageQuality: 50);
 
-    authBloc.add(UpdateUserPhotoEvent(file: File(image!.path)));
+    setState(() {
+      _image = File(image!.path);
+    });
   }
 
   _imgFromGallery() async {
     XFile? image = await ImagePicker()
         .pickImage(source: ImageSource.gallery, imageQuality: 50);
 
-    authBloc.add(UpdateUserPhotoEvent(file: File(image!.path)));
+    setState(() {
+      _image = File(image!.path);
+    });
   }
 
   void _showPicker(context) {
@@ -92,14 +99,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 user = state.user;
               });
             }
-
-            if(state is UpdateUserPhotoSuccessState) {
-              authBloc.add(LoadUserEvent());
-            }
-
-            if(state is SignOutSuccessState) {
-              Navigator.pushReplacementNamed(context, SignInPage.id);
-            }
           },
           builder: (context, state) {
             return Scaffold(
@@ -116,7 +115,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 actions: [
                   IconButton(
                       onPressed: () {
-                        authBloc.add(SignOutUserEvent());
+                        // widget.pageController!.jumpToPage(2);
                       },
                       icon: const Icon(
                         Icons.exit_to_app,
@@ -258,78 +257,76 @@ class _ProfilePageState extends State<ProfilePage> {
                         const SizedBox(
                           height: 10,
                         ),
+
                         // #name
                         Text(
                           user == null ? "" : user!.fullName.toUpperCase(),
                           style: const TextStyle(
                               color: Colors.black,
-                              fontSize: 13,
+                              fontSize: 12,
                               fontWeight: FontWeight.w600),
                         ),
 
                         // #email
                         Text(
                           user == null ? "" : user!.email,
-                          style: const TextStyle(color: Colors.black54,
-                              fontSize: 12),
+                          style: const TextStyle(color: Colors
+                              .black54, fontSize: 12),
                         ),
+
                         const SizedBox(
                           height: 15,
                         ),
 
                         // #statistics
-                        const SizedBox(
-                          height: 20,
-                        ),
 
                         // #posts
                         Expanded(
-                            child: Column(children: [
+                          child: Column(children: [
 
-                              Row(children: [
-                                Column(children: [Container(
-                                  height:70,width:70,
-                                  decoration:
-                                  BoxDecoration(borderRadius:
-                                  BorderRadius.circular(234234),
-                                      border: Border.all(color:
-                                      Colors.black,width: 2)),
-                                  child: const Icon(Icons.add,
-                                    size: 30,),),
-                                  const SizedBox(height: 5,),
+                            Row(children: [
+                              Column(children: [Container(
+                                height:70,width:70,
+                                decoration:
+                                BoxDecoration(borderRadius:
+                                BorderRadius.circular(234234),
+                                    border: Border.all(color:
+                                    Colors.black,width: 2)),
+                                child: const Icon(Icons.add,
+                                  size: 30,),),
+                              const SizedBox(height: 5,),
 
-                                  const Text('Add')],)
+                              const Text('Add')],)
 
-                              ],),
-                              BottomNavigationBar(
-                                backgroundColor: Colors.transparent,
-                                elevation: 0,
+                            ],),
+                            BottomNavigationBar(
+                              backgroundColor: Colors.transparent,
+                              elevation: 0,
 
-                                items:
-                                const [
-                                  BottomNavigationBarItem(icon: Icon
-                                    (Icons.add),label: ''),BottomNavigationBarItem(icon: Icon
-                                  (Icons.add),label: ''),BottomNavigationBarItem(icon: Icon
-                                  (Icons.add),label: ''),
-                                ],),
-                              Expanded(
-                                child: GridView.builder(
-                                  itemCount: items.length,
-                                  itemBuilder: (context, index) {
-                                    return itemOfPost(index, context);
-                                  }, gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  crossAxisSpacing: 10,
-                                  mainAxisSpacing: 10,
+                              items:
+                            const [
+                              BottomNavigationBarItem(icon: Icon
+                              (Icons.add),label: ''),BottomNavigationBarItem(icon: Icon
+                              (Icons.add),label: ''),BottomNavigationBarItem(icon: Icon
+                              (Icons.add),label: ''),
+                            ],),
+                          Expanded(
+                            child: GridView.builder(
+                            itemCount: items.length,
+                              itemBuilder: (context, index) {
+                                return itemOfPost(index, context);
+                              }, gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
 
-                                ),),
-                              ),],)
+                              ),),
+                          ),],)
                         ),
-
                       ],
                     ),
                   ),
-                  if (state is AuthLoading)
+                  if (isLoading)
                     const Center(
                       child: CircularProgressIndicator(),
                     )
@@ -342,30 +339,18 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Column itemOfPost(int index, BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        InkWell(
-          onLongPress: () {},
-          child: CachedNetworkImage(
-            width: MediaQuery.of(context).size.width,
-            fit: BoxFit.cover,
-            imageUrl: items[index].postImage,
-            placeholder: (context, url) => Container(
-              color: Colors.grey,
-            ),
-            errorWidget: (context, url, error) => Icon(Icons.error),
-          ),
+  InkWell itemOfPost(int index, BuildContext context) {
+    return   InkWell(
+      onLongPress: () {},
+      child: CachedNetworkImage(
+        width: MediaQuery.of(context).size.width,
+        fit: BoxFit.cover,
+        imageUrl: items[index].postImage,
+        placeholder: (context, url) => Container(
+          color: Colors.grey,
         ),
-        Text(
-          items[index].caption,
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(
-          height: 15,
-        ),
-      ],
+        errorWidget: (context, url, error) => Icon(Icons.error),
+      ),
     );
   }
 }
