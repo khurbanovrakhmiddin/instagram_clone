@@ -157,7 +157,8 @@ class _SearchPageState extends State<SearchPage> {
               if(user.followed) {
                 authBloc.add(UnfollowUserEvent(user: user));
               } else {
-                authBloc.add(FollowUserEvent(user: user));
+
+                 authBloc.add(FollowUserEvent(user: user));
               }
             },
             child: Text(
